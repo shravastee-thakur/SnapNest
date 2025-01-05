@@ -1,26 +1,22 @@
-import joi from "joi";
+import jwt from "jsonwebtoken";
 
-export const signupAuth = (req, res, next) => {
-  const schema = joi.object({
-    name: joi.string().trim().min(3).max(30).required(),
-    email: joi.string().trim().email().required(),
-    password: joi.string().min(6).max(14).required(),
-  });
-  const { error } = schema.validate(req.body);
-  if (error) {
-    return res.status(400).json({ success: false, message: error.message });
-  }
-  next();
-};
+export const AuthCheck = async (req, res, next) => {
+  try {
+    const authtoken = req.headers["authorization"];
 
-export const loginAuth = (req, res, next) => {
-  const schema = joi.object({
-    email: joi.string().trim().email().required(),
-    password: joi.string().min(6).max(14).required(),
-  });
-  const { error } = schema.validate(req.body);
-  if (error) {
-    return res.status(400).json({ success: false, message: error.message });
+
+    if (!authtoken) {
+      return res.send({ success: false, message: "invalid token" });
+    }
+
+    const decodevalue = await jwt.verify(authtoken, process.env.JWT_SECRET);
+    console.log(decodevalue);
+    req.user = decodevalue;
+    next();
+  } catch (error) {
+    console.log(error);
+    res
+      .status(403)
+      .json({ message: "Unauthorized, JWT token is wrong or expired" });
   }
-  next();
 };

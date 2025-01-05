@@ -3,7 +3,7 @@ import {
   LoginController,
   signupController,
 } from "../Controllers/userController.js";
-import { loginAuth, signupAuth } from "../Middlewares/Auth.js";
+import { loginAuth, signupAuth } from "../Middlewares/AuthValidation.js";
 
 const router = express.Router();
 

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import axios from "axios";
 
 const Login = () => {
   const [user, setUser] = useState({
@@ -9,6 +10,7 @@ const Login = () => {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,11 +21,32 @@ const Login = () => {
     console.log(user);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/v1/user/login",
+        user,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withcredentials: true,
+        }
+      );
+      console.log(res.data);
+      if (res?.data?.token && res?.data?.data?.name) {
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("name", res.data.data.name);
+        alert("Login successful");
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
-    <section className="h-screen w-screen flex justify-center items-center">
+    <section className="mt-32 flex justify-center items-center">
       <div className="w-3/4 md:w-2/5 lg:w-1/4 border-2 rounded-xl">
         <h1 className="text-center mt-3 text-2xl font-bold">Login</h1>
 
@@ -67,11 +90,11 @@ const Login = () => {
           <div className="flex flex-col gap-1 mt-4 ">
             <button
               type="submit"
-              className="bg-indigo-600 text-white font-bold p-2 rounded-lg "
+              className="bg-indigo-600 text-white font-bold p-2 rounded-lg"
             >
               Login
             </button>
-            <p className="mt-2">
+            <p>
               Don't have an account?
               <NavLink
                 className={"text-indigo-600 font-semibold"}

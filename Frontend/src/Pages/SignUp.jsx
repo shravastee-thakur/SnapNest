@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const SignUp = () => {
   const [user, setUser] = useState({
@@ -7,6 +8,7 @@ const SignUp = () => {
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,11 +19,37 @@ const SignUp = () => {
     console.log(user);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/v1/user/signup",
+        user,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withcredentials: true,
+        }
+      );
+
+      console.log(res.data);
+
+      if (res.data.success) {
+        alert("User created successfully");
+        setUser({ name: "", email: "", password: "" });
+        navigate("/login");
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "Something went wrong!";
+      alert(errorMessage);
+      console.log(error);
+    }
   };
   return (
-    <section className="h-screen w-screen flex justify-center items-center">
+    <section className="mt-20 flex justify-center items-center">
       <div className="w-3/4 md:w-2/5 lg:w-1/4 border-2 rounded-xl">
         <h1 className="text-center mt-3 text-2xl font-bold">SignUp</h1>
         <p className="text-center font-semibold mt-3">

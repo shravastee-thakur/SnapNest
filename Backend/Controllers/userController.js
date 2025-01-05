@@ -53,11 +53,12 @@ export const LoginController = async (req, res) => {
         .send({ success: false, message: "Password is incorrect" });
     }
 
-    const token = await jwt.sign(
+    const token = jwt.sign(
       { userId: ifUserExists._id },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
+    
 
     res.status(200).send({
       success: true,
