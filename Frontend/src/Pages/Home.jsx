@@ -13,7 +13,7 @@ const Home = () => {
     <>
       <div>
         <h1 className="text-xl lg:text-3xl text-center font-semibold mt-5">
-          Welcome, {loggedInUser}
+          Welcome {loggedInUser}
         </h1>
 
         <div className="flex justify-center">
@@ -23,7 +23,7 @@ const Home = () => {
             onClick={() => {
               localStorage.clear(), navigate("/login");
             }}
-            className="bg-orange-600 hover:bg-indigo-800 text-white font-bold py-2 px-4 rounded-lg m-4"
+            className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg m-4"
           >
             Logout
           </button>

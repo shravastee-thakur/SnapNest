@@ -13,9 +13,10 @@ import imageRoutes from "./Routes/imageRoutes.js";
 const PORT = process.env.PORT || 4000;
 
 // Middlewares
+
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );

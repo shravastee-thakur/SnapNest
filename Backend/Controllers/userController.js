@@ -58,7 +58,14 @@ export const LoginController = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
-    
+    if (!token) {
+      return res
+        .status(500)
+        .send({ success: false, message: "Error in generating token" });
+    }
+
+    ifUserExists.refreshtoken = token;
+    await ifUserExists.save({ validateBeforeSave: true });
 
     res.status(200).send({
       success: true,
