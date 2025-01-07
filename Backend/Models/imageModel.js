@@ -2,8 +2,13 @@ import mongoose from "mongoose";
 
 const imageSchema = new mongoose.Schema(
   {
-    imageURL: {
+    ImageURL: {
       type: String,
+      required: true,
+    },
+    originalName: {
+      type: String,
+      required: true,
     },
   },
   { timestamps: true }
